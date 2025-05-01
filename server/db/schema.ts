@@ -62,16 +62,6 @@ export const user = pgTable('user', {
   updatedAt: timestamp('updated_at').notNull(),
 })
 
-// products schema
-export const product = pgTable('product', {
-  id: uuid('id').primaryKey().defaultRandom(),
-  name: text('name').notNull(),
-  description: text('description'),
-  price: numeric('price').notNull(),
-  createdAt: timestamp('created_at').notNull(),
-  updatedAt: timestamp('updated_at').notNull(),
-})
-
 // customers schema
 export const customer = pgTable('customer', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -98,8 +88,22 @@ export const invoice = pgTable('invoice', {
   updatedAt: timestamp('updated_at').notNull(),
 })
 
+// products schema
+export const product = pgTable('product', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  name: text('name').notNull(),
+  description: text('description'),
+  price: numeric('price').notNull(),
+  userId: text('user_id')
+    .references(() => user.id)
+    .notNull(),
+  createdAt: timestamp('created_at').notNull(),
+  updatedAt: timestamp('updated_at').notNull(),
+})
+
 export const userRelations = relations(user, ({ many }) => ({
   invoices: many(invoice), // A user has many invoices
+  products: many(product), // A user has many products
 }))
 
 export const customerRelations = relations(customer, ({ many }) => ({
@@ -116,4 +120,12 @@ export const invoiceRelations = relations(invoice, ({ one, many }) => ({
     references: [customer.id],
   }),
   products: many(product), // An invoice has many products
+}))
+
+export const productRelations = relations(product, ({ many, one }) => ({
+  user: one(user, {
+    fields: [product.userId],
+    references: [user.id],
+  }), // A product belongs to a user
+  invoices: many(invoice), // A product has many invoices
 }))
