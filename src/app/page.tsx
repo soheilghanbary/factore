@@ -6,7 +6,6 @@ import { api } from '@/lib/api'
 import { useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
 
-const GITHUB_REPO_URL = 'https://github.com/soheilghanbary/naas'
 const COPYRIGHT_TEXT = `© ${new Date().getFullYear()} NaaS Stack - Soheil Ghanbary`
 
 const Message = () => {
@@ -37,7 +36,7 @@ export default () => {
           Next.js Starter 🚀
         </h1>
         <p className="text-foreground/85 text-sm/5">{siteConfig.description}</p>
-        <Link href={GITHUB_REPO_URL} className={buttonVariants()}>
+        <Link href={'/sign-in'} className={buttonVariants()}>
           Get Started
         </Link>
         <span className="text-foreground/85 text-xs">{COPYRIGHT_TEXT}</span>
